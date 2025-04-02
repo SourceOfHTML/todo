@@ -173,7 +173,7 @@ enum success_state add(char *p_name, char* p_desc)
 			}
 		}
 
-		while( fgetc(file_in) != '\n')
+		while( fgetc(file_in) != GROUP_SEPERATOR)
 		{
 
 		}
@@ -187,7 +187,7 @@ enum success_state add(char *p_name, char* p_desc)
 	
 
 	fseek(file_in, 0, SEEK_END);
-	fprintf(file_in, "%.5d: %s%c%s\n", id, p_name, 31, p_desc);
+	fprintf(file_in, "%.5d: %s%c%s\n", id, p_name, UNIT_SEPERATOR, p_desc);
 
 	fclose(file_in);
 	return SUCCEEDED;
@@ -215,13 +215,13 @@ enum success_state remove_todo(short p_id)
 		short temp_id = strtoull(id_in_file, NULL, 10);
 		if ( temp_id == p_id )
 		{
-			while ( fgetc(file_in) != '\n') {}
+			while ( fgetc(file_in) != GROUP_SEPERATOR) {}
 			continue;
 		}
 		fprintf(file_copy, "%.5d", temp_id);
 		
 		char ch;
-		while ( (ch = fgetc(file_in)) != '\n')
+		while ( (ch = fgetc(file_in)) != GROUP_SEPERATOR)
 		{
 			fputc(ch, file_copy);
 		}
