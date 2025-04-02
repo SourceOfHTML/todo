@@ -17,7 +17,8 @@
 #define REMOVE_COMMAND_SIZE strlen(REMOVE_COMMAND)
 
 #define WRITE_BUFFER_SIZE 6
-#define TODO_DELIMITER '\n'
+#define GROUP SEPERATOR '\n'
+#define UNIT_SEPERATOR (char)31
 
 // The format for each item is thus:
 // $id: $name{delimiter}$desc\n
@@ -38,7 +39,7 @@ enum success_state{
 
 enum success_state add(char *p_name, char* p_desc);
 enum success_state remove_todo(short p_id);
-void list();
+void list(void);
 bool has(short *, short, int);
 
 int main(int argc, char **argv)
@@ -100,10 +101,38 @@ int main(int argc, char **argv)
 
 	if(is_list)
 	{
-		// list();
+		list();
 		return 0;
 	}
 
+}
+
+void list(void)
+{
+	FILE * file_in = fopen("todo_list", "r");
+
+	if (file_in == NULL)
+	{
+		perror("Failed to open todo_list");
+		return;
+	}
+
+	char id_in_file[WRITE_BUFFER_SIZE];
+	while ( fgets(id_in_file, WRITE_BUFFER_SIZE, file_in) )
+	{
+		short id = strtoull(id_in_file, NULL, 10);
+
+		fgetc(file_in);
+		fgetc(file_in);
+		
+		char ch;
+
+		printf("%d: ", id);
+		while ( (ch = fgetc(file_in)) != 31)
+		{
+			
+		}
+	}
 }
 
 enum success_state add(char *p_name, char* p_desc)
