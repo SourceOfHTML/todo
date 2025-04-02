@@ -17,7 +17,7 @@
 #define REMOVE_COMMAND_SIZE strlen(REMOVE_COMMAND)
 
 #define WRITE_BUFFER_SIZE 6
-#define GROUP SEPERATOR '\n'
+#define GROUP_SEPERATOR '\n'
 #define UNIT_SEPERATOR (char)31
 
 // The format for each item is thus:
@@ -128,10 +128,17 @@ void list(void)
 		char ch;
 
 		printf("%d: ", id);
-		while ( (ch = fgetc(file_in)) != 31)
+		while ( (ch = fgetc(file_in)) != UNIT_SEPERATOR )
 		{
-			
+			putchar(ch);
 		}
+		putchar('\n'); putchar('\t');
+		while ( (ch = fgetc(file_in)) != GROUP_SEPERATOR )
+		{
+			putchar(ch);
+		}
+
+		putchar('\n');
 	}
 }
 
@@ -224,7 +231,8 @@ enum success_state remove_todo(short p_id)
 	
 	if ( remove("todo_list") != 0)
 	{
-		println("Failed to delete; related to file removal");
+		perror("Failed to remove item");
+		remove("temp_todo_list");
 		return FAILED;
 	}
 	file_in = NULL;
